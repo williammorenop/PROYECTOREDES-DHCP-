@@ -86,7 +86,7 @@ public class DHCPServer {
             myIp = Inet4Address.getLocalHost().getAddress();
             redes =new ArrayList<>();
             queue = new LinkedList<>();
-            //Utils.leerArchivo("Log.txt", redes);
+            Utils.leerArchivo("src/Log.txt", redes);
             new Thread(
                 new Runnable() {
                     public void run() {
@@ -118,10 +118,23 @@ public class DHCPServer {
                 {
                     pack = queue.peek();
                     Red rPack = getRed(pack.giAddr);
-                    
-                    if( pack.isDiscover() )
+                    if( rPack == null )
                     {
+                        System.out.println("No encontre la red");
+                        queue.remove();
+                        continue;
+                    }
+                        if( pack.isDiscover() )
+                    {
+                        System.out.println("Discover");
                         byte[] ip = rPack.nextIp(pack.chAddr,TIME); // nextIp tacha la ip
+                        if( ip == null )
+                        {
+                            System.out.println("No encontre una ip");
+                            queue.remove();
+                            continue;
+                        }
+                        System.out.println(Utils.bytesToString(ip));
                         buffer = pack.newOffer(ip, myIp , rPack, TIME);
                         
                         try {
@@ -141,8 +154,10 @@ public class DHCPServer {
                     }
                     else if( pack.isRequest() )
                     {
+                        System.out.println("request");
                         buffer = pack.newACK( pack.getIpOptions() , myIp , rPack, TIME);
                         try {
+                            System.out.println(buffer.length);
                             send = new DatagramPacket(
                                     buffer , buffer.length ,
                                     InetAddress.getByName(BROADCAST),
@@ -158,6 +173,7 @@ public class DHCPServer {
                     }
                     else if( pack.isRelease() )
                     {
+                        System.out.println("Release");
                         rPack.changeState( pack.ciAddr );
                     }
                     System.out.println(pack);

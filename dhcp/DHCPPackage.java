@@ -148,9 +148,12 @@ public class DHCPPackage
       for( int i = 0 ; i < 2 ; ++i )
         arr[ 10+i ] =flags[ i ];
         //12 - ciaddr
-        System.arraycopy(ciAddr, 0, arr, 12, 4);
+            System.arraycopy(ciAddr, 0, arr, 12, 4);
         //16 - yiaddr
-        System.arraycopy(yiAddr, 0, arr, 16, 4);
+        
+        for( int i = 0 ; i < 4; ++i )
+            arr[ 16+i ] = yiAddr[ i ];
+        
       //20 - siaddr
       System.arraycopy(siAddr, 0, arr, 20, 4);
 
