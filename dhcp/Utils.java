@@ -20,7 +20,7 @@ public class Utils {
 		}
 		BufferedReader br = new BufferedReader(fr);
 		try {
-			String linea,name,ip,mask,dns,gateway;
+			String linea,name= null,ip= null,mask= null,dns = null,gateway= null;
 			
 			while((linea = br.readLine())!=null)
 			{
@@ -33,6 +33,7 @@ public class Utils {
 					dns=br.readLine();
 					gateway=br.readLine();
 				}
+				Redes.add(new Red (name,stringToByte(ip),stringToByte(gateway),stringToByte(dns),stringToByte(mask)));
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
