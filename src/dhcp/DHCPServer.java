@@ -52,6 +52,7 @@ public class DHCPServer {
     }
 
     public static void main(String[] args) {
+    	Utils.leerArchivo("Log.txt");
         DHCPServer dhcpServer = new DHCPServer();
     }
 
