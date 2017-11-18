@@ -50,4 +50,12 @@ public class Utils {
             }
             return temp;
         }
+        static public byte[] stringToByte( String s )
+        {
+            byte[] temp = new byte[4];
+            String[] ts=s.split(".");
+            for( int i =0  ; i < ts.length ; ++i )
+                temp[ i ] = Byte.parseByte(ts[i]);
+            return temp;
+        }
 }
