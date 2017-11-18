@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,7 +54,9 @@ public class DHCPServer {
     }
 
     public static void main(String[] args) {
-        DHCPServer dhcpServer = new DHCPServer();
+    	List<Red> Redes =new ArrayList<Red>();
+    	Utils.leerArchivo("Log.txt", Redes);
+       // DHCPServer dhcpServer = new DHCPServer();
     }
 
 }
