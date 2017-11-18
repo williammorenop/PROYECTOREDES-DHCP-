@@ -1,6 +1,8 @@
 
 package dhcp;
 
+import java.util.Arrays;
+
 public class DHCPPackage
 {
     private byte FIN = (byte) 255;
@@ -54,7 +56,7 @@ public class DHCPPackage
       for(int w=0;w<4;w++)
         ciAddr[w]=arr[12+w];
       //16 - yiaddr
-      for(int h=0;h<2;h++)
+      for(int h=0;h<4;h++)
         yiAddr[h]=arr[16+h];
       //20 - siaddr
       for( int i = 0 ; i < 4 ; ++i )
@@ -68,12 +70,12 @@ public class DHCPPackage
       //44 - sname
       for(int i=0;i<64;i++)
         sname[i]=arr[44+i];
-      //110 - file
+      //108 - file
       for(int w=0;w<128;w++)
-        file[w]=arr[110+w];
-      // 238 -options
+        file[w]=arr[108+w];
+      // 236 -options
       for(int h=0;h<320;h++){
-        options[h]=arr[238+h];
+        options[h]=arr[236+h];
       }
 
     }
@@ -148,7 +150,7 @@ public class DHCPPackage
         //12 - ciaddr
         System.arraycopy(ciAddr, 0, arr, 12, 4);
         //16 - yiaddr
-        System.arraycopy(yiAddr, 0, arr, 16, 2);
+        System.arraycopy(yiAddr, 0, arr, 16, 4);
       //20 - siaddr
       System.arraycopy(siAddr, 0, arr, 20, 4);
 
@@ -159,9 +161,9 @@ public class DHCPPackage
         //44 - sname
         System.arraycopy(sname, 0, arr, 44, 64);
         //110 - file
-        System.arraycopy(file, 0, arr, 110, 128);
+        System.arraycopy(file, 0, arr, 108, 128);
         // 238 -options
-        System.arraycopy(options, 0, arr, 238, 320);
+        System.arraycopy(options, 0, arr, 236, 320);
       return arr;
     }
 
@@ -290,9 +292,12 @@ public class DHCPPackage
     String s= "NA";
     	return s;
   }
-  public byte toStringOptionsFirst()
+  public String toStringOptionsFirst()
   {
-      return options[6];
+      String s = "";
+      for( int i = 6; i < 7 ; ++i )
+           s += " " + options[i];
+      return s;
   }
     @Override
   public String toString()
@@ -312,6 +317,33 @@ public class DHCPPackage
               "\n"+toStringOptionsFirst()+
               "\nOptions "+  toStringOptions()+"\n";
         return W;
+    }
+
+    boolean isDiscover() {
+        return options[6] == 1;
+    }
+
+    boolean isRequest() {
+        return options[6]==3;
+    }
+
+    boolean isRelease() {
+        return options[6]==7;
+    }
+
+    byte[] getIpOptions() {
+       int indx = 4;
+       
+        int tam;
+        while(true){
+                if(options[indx] == (byte)50){
+                        return Arrays.copyOfRange(options, indx+2, indx+6);
+                }else{
+                        tam = (int)options[indx+1];
+                        indx+= tam +2;
+
+                }
+        }
     }
 
 }

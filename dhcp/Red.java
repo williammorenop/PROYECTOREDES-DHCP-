@@ -18,6 +18,8 @@ import java.util.List;
 
 public class Red {
 
+      
+
     public class IpAsign
     {
       public byte[] ip;
@@ -119,5 +121,31 @@ public class Red {
         }
         ini1 = 0;
       }
+    }
+    byte[] nextIp(byte[] chAddr, int time) {
+        for( IpAsign ip : assignableIP )
+        {
+            if( Utils.isEquals(chAddr,ip.mac) )
+                assign(ip,time);
+        }
+        for( IpAsign ip : assignableIP )
+        {
+            if( !ip.isUsed() )
+                assign(ip,time);
+        }
+        return null;
+    }
+    private void assign(IpAsign ip, int time) {
+        ip.used = true;
+        ip.timeS = new GregorianCalendar();
+        ip.timeF = new GregorianCalendar();
+        ip.timeF.add(GregorianCalendar.SECOND, time);
+    }
+     void changeState(byte[] ciAddr) {
+        for( IpAsign ip : assignableIP )
+        {
+            if( Utils.compareIp(ip.ip, ciAddr) )
+                ip.used = false;
+        }
     }
 }

@@ -58,4 +58,17 @@ public class Utils {
                 temp[ i ] = Byte.parseByte(ts[i]);
             return temp;
         }
+
+    static boolean compareIp(byte[] gateway, byte[] giAddr) {
+        return gateway[0] == giAddr[0] && gateway[1] == giAddr[1] && gateway[2] == giAddr[2] && gateway[3] == giAddr[3] ; 
+    }
+
+    static boolean isEquals(byte[] chAddr, byte[] mac) {
+        if( chAddr.length != mac.length )
+                return false;
+        for( int i = 0 ; i < chAddr.length ; ++i )
+            if( chAddr[ i ] != mac[ i ]) 
+                    return false;
+        return true;
+    }
 }
