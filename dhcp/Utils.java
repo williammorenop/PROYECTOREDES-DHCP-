@@ -39,5 +39,15 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
-
+        static public byte[] intToByte( int n )
+        {
+            byte[] temp = new byte[4];
+            for( int i=  0; i < 4; ++i )
+            {
+                  temp[ i ] = 0;
+                  temp[ i ] |= n;
+                  n <<= 8;
+            }
+            return temp;
+        }
 }

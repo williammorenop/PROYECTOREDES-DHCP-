@@ -88,7 +88,7 @@ public class DHCPPackage
         options[ indx++ ] = 53; //tipo
         options[ indx++ ] = 1; //tam
         options[ indx++ ] = 2;// offer
-        byte[] tempTime = intToByte(time);
+        byte[] tempTime = Utils.intToByte(time);
         options[ indx++ ] = 51; //time
         options[ indx++ ] = 4; //tam
         for( int i = 0 ; i < 4 ; ++i )
@@ -115,7 +115,7 @@ public class DHCPPackage
         options[ indx++ ] = 53; //tipo
         options[ indx++ ] = 1; //tam
         options[ indx++ ] = 5;// ACK
-        byte[] tempTime = intToByte(time);
+        byte[] tempTime = Utils.intToByte(time);
         options[ indx++ ] = 51; //time
         options[ indx++ ] = 4; //tam
         for( int i = 0 ; i < 4 ; ++i )
