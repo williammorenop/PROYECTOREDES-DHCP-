@@ -77,8 +77,8 @@ public class Utils {
             byte[] temp = new byte[4];
             for( int i=  0; i < 4; ++i )
             {
-                  temp[ 4-i ] = 0;
-                  temp[ 4-i ] |= n;
+                  temp[ 3-i ] = 0;
+                  temp[ 3-i ] |= n;
                   n <<= 8;
             }
             return temp;
