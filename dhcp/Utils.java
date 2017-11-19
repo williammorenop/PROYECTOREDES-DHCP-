@@ -21,7 +21,7 @@ public class Utils {
 		}
 		BufferedReader br = new BufferedReader(fr);
 		try {
-			String linea,name= null,ip= null,mask= null,dns = null,gateway= null;
+			String linea,name= null,ipS= null,ipF=null,mask= null,dns = null,gateway= null;
 
 			while((linea = br.readLine())!=null)
 			{
@@ -29,18 +29,48 @@ public class Utils {
 				if(linea.equals("------------"))
 				{
 					name=br.readLine();
-					ip=br.readLine();
+					ipS=br.readLine();
+					ipF=br.readLine();
 					mask=br.readLine();
 					dns=br.readLine();
 					gateway=br.readLine();
 				}
-				Redes.add(new Red (name,stringToByte(ip),stringToByte(gateway),stringToByte(dns),stringToByte(mask)));
+				System.out.println("---");
+				  Redes.add(new Red (name,intToByte(ipS),intToByte(ipF),intToByte(gateway),intToByte(dns),intToByte(mask)));
+				//Redes.add(new Red (name,stringToByte(ipS),stringToByte(gateway),stringToByte(dns),stringToByte(mask)));
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	///////////////////////////////////
+        static public byte[] intToByte( String s )
+        {
+            // System.out.println(s);
+            StringTokenizer st= new StringTokenizer(s);
+
+            byte[] temp = new byte[4];
+            String a;
+            for( int i =0  ; i < 4 ; ++i )
+            {
+                a=st.nextToken(".");
+                int b=Integer.valueOf(a);
+                //System.out.println("{{{{"+b);
+                byte c = (byte) b;
+                //System.out.println(c); // -22
+                //int i2 = c & 0xFF;
+                //System.out.println(i2); // 234
+ 
+                temp[ i ] = c;
+
+                
+            }
+          //  System.out.println((temp[0] & 0xFF )+"."+(temp[1] & 0xFF)+"."+(temp[2]& 0xFF)+"."+(temp[3]& 0xFF));
+            return temp;
+        }
+        //////////////////////////////////
+        
         static public byte[] intToByte( int n )
         {
             byte[] temp = new byte[4];
