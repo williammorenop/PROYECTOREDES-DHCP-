@@ -80,13 +80,14 @@ public class DHCPServer {
         try {
            Scanner s=new Scanner (System.in);
             System.out.println("INGRESE EL TIEMPO DE ALQUILER EN SEGUNDOS");
-           TIME = s.nextInt();
+            TIME = s.nextInt();
             
             
             myIp = Inet4Address.getLocalHost().getAddress();
             redes =new ArrayList<>();
             queue = new LinkedList<>();
             Utils.leerArchivo("src/Log.txt", redes);
+            System.out.println("3444");
             new Thread(
                 new Runnable() {
                     public void run() {
@@ -94,7 +95,9 @@ public class DHCPServer {
                     }
                 }
             ).start();
+            System.out.println("55555");
             DHCPServer dhcpServer = new DHCPServer();
+            System.out.println("6");
         } catch (UnknownHostException ex) {
             Logger.getLogger(DHCPServer.class.getName()).log(Level.SEVERE, null, ex);
         }

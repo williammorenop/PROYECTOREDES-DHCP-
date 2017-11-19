@@ -37,6 +37,7 @@ public class Utils {
 				}
 				System.out.println("---");
 				  Redes.add(new Red (name,intToByte(ipS),intToByte(ipF),intToByte(gateway),intToByte(dns),intToByte(mask)));
+				  System.out.println("33");
 				//Redes.add(new Red (name,stringToByte(ipS),stringToByte(gateway),stringToByte(dns),stringToByte(mask)));
 			}
 		} catch (IOException e) {

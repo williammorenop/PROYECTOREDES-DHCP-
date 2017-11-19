@@ -85,76 +85,75 @@ public class Red {
     public byte[] gateway;
     public byte[] dns;
     public byte[] mask;
+    public byte[] ipU;
     
     public List<IpAsign> assignableIP;
 
-    Red(String name , byte[] ipS , byte[] gateway , byte[] dns , byte[] mask )
-    {
-      this.name = name;
-      this.ipS = ipS;
-      this.gateway = gateway;
-      this.dns = dns;
-      this.mask = mask;
-      this.assignableIP = new ArrayList<>();
-      byte[] temp = new byte[4];
-      int ini0 = Utils.unsignedToBytes(ipS[0]);
-      int ini1 = Utils.unsignedToBytes(ipS[1]);
-      int ini2 = Utils.unsignedToBytes(ipS[2]);
-      int ini3 = Utils.unsignedToBytes(ipS[3]);
-      for( int i0 = ini0 ; i0 <= 255 ; ++i0 )
-      {
-        for( int i1 = ini1 ; i1 <= 255 ; ++i1 )
-        {
-
-          for( int i2 = ini2 ; i2 <= 255; ++i2 )
-          {
-
-            for( int i3 = ini3 ; i3 <= 255;++i3 )
-            {
-                temp[0] = (byte)i0;
-                temp[1] = (byte)i1;
-                temp[2] = (byte)i2;
-                temp[3] = (byte)i3;
-                System.out.println("Voy a ingresar :"+Utils.bytesToString(temp));
-                this.assignableIP.add( new IpAsign( temp ) );
-            }
-            ini3 = 0;
-          }
-          ini2 = 0;
-        }
-        ini1 = 0;
-      }
-    }
-    
     Red(String name , byte[] ipS,byte[] ipF , byte[] gateway , byte[] dns , byte[] mask )
     {
       this.name = name;
       this.ipS = ipS;
+      this.ipU=new byte[4];
+      
+      for (int i = 0; i < 4; i++) {
+		this.ipU [i]= ipS[i];
+	}
       this.ipF = ipF;
       this.gateway = gateway;
       this.dns = dns;
       this.mask = mask;
       this.assignableIP = new ArrayList<>();
       //System.out.println("{{{{"+ipS[1]+"{{{"+(int)ipS[1]);
-      // System.out.println((  System.out.println((temp[0] & 0xFF )+"."+(temp[1] & 0xFF)+"."+(temp[2]& 0xFF)+"."+(temp[3]& 0xFF)); )+"."+(temp[1] & 0xFF)+"."+(temp[2]& 0xFF)+"."+(temp[3]& 0xFF));
-      byte[] temp = new byte[4];
-      for (int i =(ipS[0] & 0xFF ); i < (ipF[0] & 0xFF ); i++) {
-		for (int j = (ipS[1] & 0xFF ); j <(ipF[1] & 0xFF ); j++) {
-			for (int j2 = (ipS[2] & 0xFF ); j2 < (ipF[2] & 0xFF ); j2++) {
-				for (int k = (ipS[3] & 0xFF ); k < (ipF[3] & 0xFF ); k++) {
-					temp[0] = (byte)i;
-	                temp[1] = (byte)j;
-	                temp[2] = (byte)j2;
-	                temp[3] = (byte)k;
-	                
-	                System.out.println("METO: "+(temp[0] & 0xFF )+"."+(temp[1] & 0xFF)+"."+(temp[2]& 0xFF)+"."+(temp[3]& 0xFF)+"."+(temp[1] & 0xFF)+"."+(temp[2]& 0xFF)+"."+(temp[3]& 0xFF));
-	                
-	                this.assignableIP.add(new IpAsign(temp));
-				}
-			}
-		}
-	}
+      System.out.println((ipS[0] & 0xFF )+"."+(ipS[1] & 0xFF)+"."+(ipS[2]& 0xFF)+"."+(ipS[3]& 0xFF));
+      System.out.println((ipF[0] & 0xFF )+"."+(ipF[1] & 0xFF)+"."+(ipF[2]& 0xFF)+"."+(ipF[3]& 0xFF));
+      System.out.println();
     }
+    byte[] newIP(int time)
+    {
+    	byte[] temp = new byte[4];
+        for (int i = 0; i < 4; i++) {
+    	temp [i]= ipU[i];
+    	}
+        
+        if(ipU[4]!=255 )
+        {
+        	ipU[4]++;        	
+        }
+        else 
+        {
+        	ipU[4]=0;
+        	if(ipU[3]!=255)
+        	{
+        		ipU[3]++;        		
+        	}
+        	else
+        	{
+        		ipU[3]=0;
+        		if(ipU[2]!=255)
+        		{
+        			ipU[2]++; 
+        		}
+        		else
+        		{
+        			ipU[2]=0;
+            		if(ipU[1]!=255)
+            		{
+            			ipU[1]++; 
+            		}
+            		else 
+            		{
+            			System.err.println("ERROR : FIN IPS");
+            			return null;
+            		}
+        		}
+        	}
+        }
+        this.assignableIP.add(new IpAsign(temp));        
+    	assign(assignableIP.get(assignableIP.size()-1), time);
+		return temp;
+ 
+    }
+    
     byte[] nextIp(byte[] chAddr, int time) {
         for( IpAsign ip : assignableIP )
         {
@@ -172,13 +171,14 @@ public class Red {
                 return ip.ip;
             }
         }
-        return null;
+        return newIP(time);
     }
     private void assign(IpAsign ip, int time) {
         ip.used = true;
         ip.timeS = new GregorianCalendar();
         ip.timeF = new GregorianCalendar();
         ip.timeF.add(GregorianCalendar.SECOND, time);
+      
     }
      void changeState(byte[] ciAddr) {
         for( IpAsign ip : assignableIP )
