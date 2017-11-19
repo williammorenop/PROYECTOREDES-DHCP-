@@ -115,30 +115,30 @@ public class Red {
     	temp [i]= ipU[i];
     	}
         
-        if(ipU[4]!=255 )
+        if(ipU[3]!=255 )
         {
-        	ipU[4]++;        	
+        	ipU[3]++;        	
         }
         else 
         {
-        	ipU[4]=0;
-        	if(ipU[3]!=255)
+        	ipU[3]=0;
+        	if(ipU[2]!=255)
         	{
-        		ipU[3]++;        		
+        		ipU[2]++;        		
         	}
         	else
         	{
-        		ipU[3]=0;
-        		if(ipU[2]!=255)
+        		ipU[2]=0;
+        		if(ipU[1]!=255)
         		{
-        			ipU[2]++; 
+        			ipU[1]++; 
         		}
         		else
         		{
-        			ipU[2]=0;
-            		if(ipU[1]!=255)
+        			ipU[1]=0;
+            		if(ipU[0]!=255)
             		{
-            			ipU[1]++; 
+            			ipU[0]++; 
             		}
             		else 
             		{
