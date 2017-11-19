@@ -6,6 +6,7 @@
 package dhcp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -22,9 +23,10 @@ public class Red {
 
 
 
-    public class IpAsign
+	public class IpAsign
     {
-      public byte[] ip;
+
+	public byte[] ip;
       public byte[] mac;
       public boolean used;
       public GregorianCalendar timeS;
@@ -37,6 +39,41 @@ public class Red {
         this.mac = null;
         this.timeS = this.timeF = null;
       }
+      public void toString2() {
+    	  System.out.println("|"+Utils.bytesToString(ip)+"\t|\t"+mactostring(mac)+"\t|\t"+used+"\t|\t"+timeS+"\t|\t"+timeF+"\t|\t");
+      }
+      public String mactostring(byte[] mac)
+      {
+        String s = "";
+        for( int i = 0 ;i  < 6; ++i )
+        {
+          if( i != 0 )
+            s += ":";
+          s+=harToString(mac[i]);
+        }
+        return s;
+      }
+      private String harToString( byte n )
+      {
+        return String.valueOf(hexUpperChar(n))+String.valueOf(hexLowerChar(n));
+	}
+     	private char hexUpperChar(byte b) {
+            b = (byte) ((b >> 4) & 0xf);
+            if (b == 0) return '0';
+            else if (b < 10) return (char) ('0' + b);
+            else return (char) ('a' + b - 10);
+
+
+        }
+        private char hexLowerChar(byte b) {
+            b = (byte) (b & 0xf);
+
+            if (b == 0) return '0';
+
+            else if (b < 10) return (char) ('0' + b);
+
+            else return (char) ('a' + b - 10);
+        }
         public byte[] getIp() {
             return ip;
         }
@@ -210,4 +247,26 @@ public class Red {
 	    temp.timeF.add(GregorianCalendar.SECOND, time);
 	    return true;
      }
+     
+     public String toString() {
+    	 System.out.println(" Nombre: "+name+" IP Inicio: "+ Utils.bytesToString(ipS)+ " IP Fin: "+Utils.bytesToString(ipF)+" Mascara: "+Utils.bytesToString(mask)+" DNS: "+Utils.bytesToString(dns)+" GateWay "+Utils.bytesToString(gateway));
+    	 System.out.println("-----------------------------------------------------------------------------------------");
+    	 System.out.println("|IP\t|\tMAC\t|\tUso\t|\tTiempo Inicio\t|\tTiempo Fin\t|\t");    	 
+    	 System.out.println("-----------------------------------------------------------------------------------------");
+    	 for (IpAsign ipAsign : assignableIP) {
+			ipAsign.toString2();
+    	 }
+    	 System.out.println("-----------------------------------------------------------------------------------------");
+    	 
+		return null;
+     }
+	public void cambioEstado() {
+		for (IpAsign ipAsign : assignableIP) {
+			GregorianCalendar horaactual =new GregorianCalendar();
+			if(horaactual.after(ipAsign.getTimeF()))
+			{
+				ipAsign.setUsed(false);
+			}
+		}		
+	}
 }

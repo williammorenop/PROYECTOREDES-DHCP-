@@ -64,7 +64,7 @@ public class DHCPServer {
               dhcpPack.llenada(buf);
               if( dhcpPack.op == 1 )
               {
-                System.out.println(dhcpPack);
+                //System.out.println(dhcpPack);
                 queue.add(dhcpPack);
               }
             }
@@ -87,7 +87,7 @@ public class DHCPServer {
             redes =new ArrayList<>();
             queue = new LinkedList<>();
             Utils.leerArchivo("src/Log.txt", redes);
-            System.out.println("3444");
+            //System.out.println("3444");
             new Thread(
                 new Runnable() {
                     public void run() {
@@ -95,9 +95,9 @@ public class DHCPServer {
                     }
                 }
             ).start();
-            System.out.println("55555");
+            //System.out.println("55555");
             DHCPServer dhcpServer = new DHCPServer();
-            System.out.println("6");
+           // System.out.println("6");
         } catch (UnknownHostException ex) {
             Logger.getLogger(DHCPServer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -129,7 +129,7 @@ public class DHCPServer {
                     }
                         if( pack.isDiscover() )
                     {
-                        System.out.println("Discover");
+                        //System.out.println("Discover");
                         byte[] ip = rPack.nextIp(pack.chAddr,TIME); // nextIp tacha la ip
                         if( ip == null )
                         {
@@ -137,7 +137,7 @@ public class DHCPServer {
                             queue.remove();
                             continue;
                         }
-                        System.out.println(Utils.bytesToString(ip));
+                        //System.out.println(Utils.bytesToString(ip));
                         buffer = pack.newOffer(ip, myIp , rPack, TIME);
                         
                         try {
@@ -172,8 +172,8 @@ public class DHCPServer {
                     		temp=pack.getIpOptions();
                     	}
                     	buffer = pack.newACK(temp , myIp , rPack, TIME);
-                        System.out.println("request");
-                        System.out.println(buffer.length);
+                        //System.out.println("request");
+                       // System.out.println(buffer.length);
 						send = new DatagramPacket(
 						        buffer , buffer.length ,
 						        teme,
@@ -186,12 +186,23 @@ public class DHCPServer {
                     }
                     else if( pack.isRelease() )
                     {
-                        System.out.println("Release");
+                        //System.out.println("Release");
                         rPack.changeState( pack.ciAddr );
                     }
-                    System.out.println(pack);
+                    //System.out.println(pack);
                     queue.remove();
                 }
+                ///////////////////////////
+                for (Red red : redes) {
+					red.cambioEstado();
+				}
+           	 System.out.println("************************************************************************************************************************************************************************");
+
+                for (Red red : redes) {
+                	red.toString();
+                }
+                System.out.println("************************************************************************************************************************************************************************");
+                /////////////////////////
             }
         } catch (SocketException | UnknownHostException ex) {
             Logger.getLogger(DHCPServer.class.getName()).log(Level.SEVERE, null, ex);
