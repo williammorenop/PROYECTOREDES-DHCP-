@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.rmi.CORBA.Util;
+
 /**
  *
  * @author root
@@ -157,6 +159,7 @@ public class Red {
     byte[] nextIp(byte[] chAddr, int time) {
         for( IpAsign ip : assignableIP )
         {
+        	System.out.println("--------------------Entre1");
             if( Utils.isEquals(chAddr,ip.mac) )
             {
                 assign(ip,time);
@@ -165,12 +168,14 @@ public class Red {
         }
         for( IpAsign ip : assignableIP )
         {
+        	System.out.println("********************Entre2");
             if( !ip.isUsed() )
             {
                 assign(ip,time);
                 return ip.ip;
             }
         }
+        System.out.println("{{{{{{{{{{{{{{{{{{{{Entre3");
         return newIP(time);
     }
     private void assign(IpAsign ip, int time) {
@@ -187,4 +192,22 @@ public class Red {
                 ip.used = false;
         }
     }
+     public IpAsign verificarip (byte[] ciAddr)
+     {
+	    for (IpAsign ip : assignableIP) {
+			if(Utils.compareIp(ip.ip, ciAddr));
+			return ip;
+		}
+	    return null;
+     }
+     public boolean updateTime (byte[] ciAddr,int time)
+     {
+	    IpAsign temp= verificarip(ciAddr);
+	    if (temp==null) {
+			
+	    	return false;
+		}
+	    temp.timeF.add(GregorianCalendar.SECOND, time);
+	    return true;
+     }
 }

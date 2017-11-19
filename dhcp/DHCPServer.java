@@ -157,17 +157,27 @@ public class DHCPServer {
                     }
                     else if( pack.isRequest() )
                     {
+                    	byte[] temp=null;
+                    	
+                    	InetAddress teme;
+                    	if(!Utils.bytesToString(pack.ciAddr).equals("0.0.0.0"))
+                    	{ 
+                    		temp = pack.ciAddr;
+                    		teme=Inet4Address.getByAddress(temp);
+                    		rPack.updateTime(pack.ciAddr, TIME);
+                    	}
+                    	else
+                    	{
+                    		teme=InetAddress.getByName(BROADCAST);
+                    		temp=pack.getIpOptions();
+                    	}
+                    	buffer = pack.newACK(temp , myIp , rPack, TIME);
                         System.out.println("request");
-                        buffer = pack.newACK( pack.getIpOptions() , myIp , rPack, TIME);
-                        try {
-                            System.out.println(buffer.length);
-                            send = new DatagramPacket(
-                                    buffer , buffer.length ,
-                                    InetAddress.getByName(BROADCAST),
-                                    SENDPORT );
-                        } catch (UnknownHostException ex) {
-                            Logger.getLogger(DHCPServer.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        System.out.println(buffer.length);
+						send = new DatagramPacket(
+						        buffer , buffer.length ,
+						        teme,
+						        SENDPORT );
                         try {
                             socketSend.send(send);
                         } catch (IOException ex) {
@@ -183,7 +193,7 @@ public class DHCPServer {
                     queue.remove();
                 }
             }
-        } catch (SocketException ex) {
+        } catch (SocketException | UnknownHostException ex) {
             Logger.getLogger(DHCPServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

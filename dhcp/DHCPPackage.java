@@ -106,8 +106,9 @@ public class DHCPPackage
         options[ indx ] = FIN;
         return toBytes();
     }
-    public byte[] newACK(byte[] ipOffer,byte[] ipServer,Red red,int time )
+    public byte[] newACK(byte[] ipOffer,byte[] ipServer,Red red,int time)
     {
+    	
         op = 2; // offer
         yiAddr = ipOffer;
         siAddr = ipServer;
@@ -132,8 +133,11 @@ public class DHCPPackage
         for( int i = 0 ; i < 4 ; ++i )
               options[ indx++ ] = red.dns[ i ]; // dns
         options[ indx ] = FIN;
+        
         return toBytes();
     }
+    
+    
     public byte[] toBytes()
     {
       byte[] arr = new byte[ 1024 ];
