@@ -107,7 +107,7 @@ public class Red {
           for( int i2 = ini2 ; i2 <= 255; ++i2 )
           {
 
-            for( int i3 = ini3 ; i3 <= 255 ++i3 )
+            for( int i3 = ini3 ; i3 <= 255;++i3 )
             {
                 temp[0] = (byte)i0;
                 temp[1] = (byte)i1;
