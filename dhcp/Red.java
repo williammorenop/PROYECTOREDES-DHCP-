@@ -199,7 +199,7 @@ public class Red {
     byte[] nextIp(byte[] chAddr, int time) {
         for( IpAsign ip : assignableIP )
         {
-        	System.out.println("--------------------Entre1");
+        	//System.out.println("--------------------Entre1");
             if( Utils.isEquals(chAddr,ip.mac) )
             {
                 assign(ip,time,chAddr,false);
@@ -208,14 +208,14 @@ public class Red {
         }
         for( IpAsign ip : assignableIP )
         {
-        	System.out.println("********************Entre2");
+        	//System.out.println("********************Entre2");
             if( !ip.isUsed() )
             {
                 assign(ip,time,chAddr,false);
                 return ip.ip;
             }
         }
-        System.out.println("{{{{{{{{{{{{{{{{{{{{Entre3");
+       // System.out.println("{{{{{{{{{{{{{{{{{{{{Entre3");
         return newIP(time,chAddr);
     }
     public void assign(IpAsign ip, int time,byte[] mac, boolean used) {
@@ -223,9 +223,12 @@ public class Red {
         ip.mac = new byte[6];
         for( int i = 0;  i < 6 ; ++i )
         	ip.mac[ i ] = mac[ i ];
-        ip.timeS = new GregorianCalendar();
         ip.timeF = new GregorianCalendar();
-        ip.timeF.add(GregorianCalendar.SECOND, time);
+        ip.timeS = new GregorianCalendar();
+        if((ip.timeS.equals(ip.timeF)))
+        {
+        	ip.timeF.add(GregorianCalendar.SECOND, time);        	
+        }
       
     }
      void changeState(byte[] ciAddr) {
