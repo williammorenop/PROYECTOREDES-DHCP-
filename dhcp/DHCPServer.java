@@ -5,8 +5,12 @@
  */
 package dhcp;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 
 import static java.lang.Thread.sleep;
 import java.net.DatagramPacket;
@@ -41,6 +45,7 @@ public class DHCPServer {
     static List<Red> redes;
     static Queue<DHCPPackage> queue;
     static byte[] myIp;
+    static PrintWriter fileLog;
 
 
     private static Red getRed(byte[] giAddr) {
@@ -53,7 +58,6 @@ public class DHCPServer {
 
     DHCPServer()
     {
-    	PrintWriter fileLog;
         try {
             DatagramSocket socket = new DatagramSocket(PORT);
             System.out.println("Imprimo socket " + socket);
@@ -61,7 +65,6 @@ public class DHCPServer {
             boolean listen = true;
             byte[] buf = new byte[ MAX_LENGHT_BUFFER ];
             DatagramPacket packet = new DatagramPacket( buf , buf.length );
-            fileLog = new PrintWriter("log.txt", "UTF-8");
             while(listen) //
             {
               socket.receive(packet);
@@ -72,10 +75,10 @@ public class DHCPServer {
                 //System.out.println(dhcpPack);
             	
                 queue.add(dhcpPack);
-                fileLog.println(dhcpPack.toStringLog());
+                //System.out.println(dhcpPack.toStringLog());
+                
               }
             }
-            fileLog.close();
         } catch (SocketException ex) {
             Logger.getLogger(DHCPServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -86,6 +89,11 @@ public class DHCPServer {
 
     public static void main(String[] args) {
         try {
+        	fileLog = new PrintWriter("log.txt");
+        	fileLog.println("MessageType\tHardwareType\tHAddrLength\t"
+        			+"Hops\tTransId\tSelapse\tClientIp\tYoutIp\t"
+        			+"NServerIp\tRelaIp\tClientMAC\tHostname\tOptions");
+        	fileLog.close();
            Scanner s=new Scanner (System.in);
             System.out.println("INGRESE EL TIEMPO DE ALQUILER EN SEGUNDOS");
             TIME = s.nextInt();
@@ -106,7 +114,7 @@ public class DHCPServer {
             //System.out.println("55555");
             DHCPServer dhcpServer = new DHCPServer();
            // System.out.println("6");
-        } catch (UnknownHostException ex) {
+        } catch (UnknownHostException | FileNotFoundException ex) {
             Logger.getLogger(DHCPServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -125,9 +133,11 @@ public class DHCPServer {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(DHCPServer.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                fileLog = new PrintWriter(new FileOutputStream(new File("log.txt"),true));
                 while( !queue.isEmpty() )
                 {
-                    pack = queue.peek();
+                	pack = queue.peek();
+                	fileLog.println(pack.toStringLog());
                     Red rPack = getRed(pack.giAddr);
                     if( rPack == null )
                     {
@@ -201,6 +211,7 @@ public class DHCPServer {
                     //System.out.println(pack);
                     queue.remove();
                 }
+                fileLog.close();
                 ///////////////////////////
                 for (Red red : redes) {
 					red.cambioEstado();
@@ -213,7 +224,7 @@ public class DHCPServer {
                 System.out.println("************************************************************************************************************************************************************************");
                 /////////////////////////
             }
-        } catch (SocketException | UnknownHostException ex) {
+        } catch (SocketException | UnknownHostException | FileNotFoundException ex) {
             Logger.getLogger(DHCPServer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

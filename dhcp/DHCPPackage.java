@@ -358,13 +358,12 @@ public class DHCPPackage
     	String ret =  op +"\t"+ hType + "\t"+ hLenght +"\t"
         + hOps +"\t"+  toStringXId()  +
         "\t"+  toStringSecs() +
-        "\t"+  toStringFlags()+
         "\t"+  toStringCiAddr()+
         "\t"+  toStringYiAddr()+
         "\t"+  toStringSiAddr()+
         "\t"+  toStringGiAddr()+
         "\t"+  toStringChAddr()+
-        "\t"+  toStringSname()+"\t"+getOptionTipe();
+        "\t"+ getOptionTipe();
     	
     	return ret;
     }
