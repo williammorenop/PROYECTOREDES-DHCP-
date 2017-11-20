@@ -28,7 +28,6 @@ public class Red {
       public boolean used;
       public GregorianCalendar timeS;
       public GregorianCalendar timeF;
-
       IpAsign(byte[] ip)
       {
         this.ip = ip;
@@ -124,11 +123,12 @@ public class Red {
     public byte[] dns;
     public byte[] mask;
     public byte[] ipU;
-    
+    public boolean masIp;
     public List<IpAsign> assignableIP;
 
     Red(String name , byte[] ipS,byte[] ipF , byte[] gateway , byte[] dns , byte[] mask )
     {
+    	this.masIp = true;
       this.name = name;
       this.ipS = ipS;
       this.ipU=new byte[4];
@@ -148,6 +148,10 @@ public class Red {
     }
     byte[] newIP(int time,byte[] mac)
     {
+    	if(!this.masIp )
+    		return null;
+    	if( Utils.compareIp(this.ipU, this.ipF) )
+    		this.masIp = false;
     	byte[] temp = new byte[4];
         for (int i = 0; i < 4; i++) {
     	temp [i]= ipU[i];
