@@ -10,8 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-
 import static java.lang.Thread.sleep;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -46,6 +44,7 @@ public class DHCPServer {
     static Queue<DHCPPackage> queue;
     static byte[] myIp;
     static PrintWriter fileLog;
+	private static Scanner s;
 
 
     private static Red getRed(byte[] giAddr) {
@@ -58,8 +57,9 @@ public class DHCPServer {
 
     DHCPServer()
     {
+    	DatagramSocket socket;
         try {
-            DatagramSocket socket = new DatagramSocket(PORT);
+            socket = new DatagramSocket(PORT);
             System.out.println("Imprimo socket " + socket);
             System.out.println("Escuchando por el puerto "+PORT+"...");
             boolean listen = true;
@@ -90,11 +90,11 @@ public class DHCPServer {
     public static void main(String[] args) {
         try {
         	fileLog = new PrintWriter("log.txt");
-        	fileLog.println("MessageType\t|\tHardwareType\t|\tHAddrLength\t|\t"
-        			+"Hops\t|\tTransId\t|\tSelapse\t|\tClientIp\t|\tYoutIp\t|\t"
-        			+"NServerIp\t|\tRelaIp\t|\tClientMAC\t|\tHostname\t|\tOptions");
+        	fileLog.println("\tTime\t\t|\tMT|\t"
+        			+"sec\t|\t\tClientIp\t\t|\t\tYourIp\t\t|\t\t"
+        			+"NServerIp\t\t|\t\tRelaIp\t\t|\t\tClientMAC\t\t|\tOptions");
         	fileLog.close();
-           Scanner s=new Scanner (System.in);
+           s = new Scanner (System.in);
             System.out.println("INGRESE EL TIEMPO DE ALQUILER EN SEGUNDOS");
             TIME = s.nextInt();
             
@@ -121,10 +121,11 @@ public class DHCPServer {
     
     static private void update()
     {
+    	DatagramSocket socketSend;
         try {
             DHCPPackage pack;
             byte[] buffer;
-            DatagramSocket socketSend = new DatagramSocket(SENDPORT);
+             socketSend = new DatagramSocket(SENDPORT);
             DatagramPacket send = null;
             while( true )
             {

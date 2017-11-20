@@ -204,7 +204,7 @@ public class DHCPPackage
     	for( int i = 0 ; i < 4 ; ++i )
         {
             num<<=8;
-            num|=xId[ i ] ;
+            num|=xId[ 3-i ] ;
         }
 
     	return num;
@@ -215,7 +215,7 @@ public class DHCPPackage
     	for( int i =0  ;i < 2 ; ++i )
         {
             num <<= 8;
-            num |= secs[ i ];
+            num |= secs[ 1 ];
         }
     	return num;
   }
@@ -230,47 +230,19 @@ public class DHCPPackage
   }
   public String toStringCiAddr()
   {
-    String s = "";
-    for( int i = 0 ;i  < 4; ++i )
-    {
-      if( i != 0 )
-        s += ".";
-      s+=Byte.toString(ciAddr[i]);
-    }
-    return s;
+    return Utils.bytesToString(ciAddr);
   }
 
   public String toStringYiAddr(){
-  	String s= "";
-    	for( int i = 0 ; i < 4 ; ++i )
-        {
-          if(i!=0)
-            s += ".";
-          s+=Byte.toString(yiAddr[ i ]);
-        }
-    	return s;
+  	return Utils.bytesToString(this.yiAddr);
   }
    public String toStringSiAddr()
   {
-    String s = "";
-    for( int i = 0 ;i  < 4; ++i )
-    {
-      if( i != 0 )
-        s += ".";
-      s+=Byte.toString(siAddr[i]);
-    }
-    return s;
+    return Utils.bytesToString(this.siAddr);
   }
 
   public String toStringGiAddr(){
-  	String s= "";
-    	for( int i = 0 ; i < 4 ; ++i )
-        {
-          if(i!=0)
-            s += ".";
-          s+=Byte.toString(giAddr[ i ]);
-        }
-    	return s;
+  	return Utils.bytesToString(this.giAddr);
   }
 
   public String toStringChAddr()
@@ -355,10 +327,9 @@ public class DHCPPackage
     }
     public String toStringLog()
     {
-    	String ret =  op +"\t|\t"+ hType + "\t|\t"+ hLenght +"\t|\t"
-        + hOps +"\t"+  toStringXId()  +
+    	String ret =  Utils.printTime()+ "\t|\t" +op +
         "\t|\t"+  toStringSecs() +
-        "\t|\t"+  toStringCiAddr()+
+        "\t\t|\t"+  toStringCiAddr()+
         "\t|\t"+  toStringYiAddr()+
         "\t|\t"+  toStringSiAddr()+
         "\t|\t"+  toStringGiAddr()+
