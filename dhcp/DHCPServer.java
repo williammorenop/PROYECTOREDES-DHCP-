@@ -25,6 +25,8 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import dhcp.Red.IpAsign;
+
 /**
  *
  * @author johan
@@ -121,6 +123,7 @@ public class DHCPServer {
     
     static private void update()
     {
+    	boolean nAck;
     	DatagramSocket socketSend;
         try {
             DHCPPackage pack;
@@ -129,6 +132,7 @@ public class DHCPServer {
             DatagramPacket send = null;
             while( true )
             {
+            	nAck = false;
                 try {
                     sleep(1000);
                 } catch (InterruptedException ex) {
@@ -189,10 +193,23 @@ public class DHCPServer {
                     	{
                     		teme=InetAddress.getByName(BROADCAST);
                     		temp=pack.getIpOptions();
-                    		rPack.assign(rPack.agregarIp(temp), TIME, pack.chAddr,true);;
+                    		IpAsign tt = rPack.verificarip(temp);
+                    		
+                    		if( tt != null && tt.used == true && !Utils.isEquals(tt.mac, pack.chAddr) )
+                    		{
+                    			nAck = true;
+                    		
+                    		}
+                    		else
+                    		{
+                    			rPack.assign(rPack.agregarIp(temp), TIME, pack.chAddr,true);
+                    		}
                     	}
-                    	buffer = pack.newACK(temp , myIp , rPack, TIME);
-                        //System.out.println("request");
+                    	if( !nAck )
+                    		buffer = pack.newACK(temp , myIp , rPack, TIME);
+                    	else
+                    		buffer = pack.newNACK( temp , myIp , rPack , TIME );
+                    	//System.out.println("request");
                        // System.out.println(buffer.length);
 						send = new DatagramPacket(
 						        buffer , buffer.length ,

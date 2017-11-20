@@ -347,4 +347,31 @@ public class DHCPPackage
 			return "Request";
 		return "";
 	}
+	public byte[] newNACK(byte[] temp, byte[] ipServer, Red red, int time) {
+		 op = 2; // offer
+	        siAddr = ipServer;
+	        for( int i = 0 ;i < 316 ; ++i )
+	               options[ 4+i ] = 0;
+	        int indx = 4;
+	        options[ indx++ ] = 53; //tipo
+	        options[ indx++ ] = 1; //tam
+	        options[ indx++ ] = 6;// ACK
+	        
+	        byte[] tempTime = Utils.intToByte(time);
+	        options[ indx++ ] = 51; //time
+	        options[ indx++ ] = 4; //tam
+	        for( int i = 0 ; i < 4 ; ++i )
+	            options[ indx++ ] = tempTime[ i ];
+	        options[ indx++ ] = 1 ; //net
+	        options[ indx++ ] = 4 ; //tam
+	        for( int i = 0; i < 4 ; ++i )
+	              options[ indx++ ] = red.mask[ i ]; //mask
+	        options[ indx++ ] = 6 ; //dns
+	        options[ indx++ ] = 4; //tam
+	        for( int i = 0 ; i < 4 ; ++i )
+	              options[ indx++ ] = red.dns[ i ]; // dns
+	        options[ indx ] = FIN;
+	        
+	        return toBytes();
+	}
 }

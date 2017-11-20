@@ -148,49 +148,47 @@ public class Red {
     }
     byte[] newIP(int time,byte[] mac)
     {
-    	if(!this.masIp )
-    		return null;
-    	if( Utils.compareIp(this.ipU, this.ipF) )
-    		this.masIp = false;
     	byte[] temp = new byte[4];
-        for (int i = 0; i < 4; i++) {
-    	temp [i]= ipU[i];
-    	}
-        
-        if(ipU[3]!=255 )
-        {
-        	ipU[3]++;        	
-        }
-        else 
-        {
-        	ipU[3]=0;
-        	if(ipU[2]!=255)
-        	{
-        		ipU[2]++;        		
-        	}
-        	else
-        	{
-        		ipU[2]=0;
-        		if(ipU[1]!=255)
-        		{
-        			ipU[1]++; 
-        		}
-        		else
-        		{
-        			ipU[1]=0;
-            		if(ipU[0]!=255)
-            		{
-            			ipU[0]++; 
-            		}
-            		else 
-            		{
-            			System.err.println("ERROR : FIN IPS");
-            			return null;
-            		}
-        		}
-        	}
-        }
-        this.assignableIP.add(new IpAsign(temp));        
+    	if(!this.masIp )
+			return null;
+		if( Utils.compareIp(this.ipU, this.ipF) )
+			this.masIp = false;
+		for( int i = 0; i < 4 ; ++i )
+			temp[ i ] = this.ipU[i];
+	    if(ipU[3]!=(byte)255 )
+	    {
+	    	ipU[3]= (byte) (Utils.unsignedToBytes(ipU[3])+1);        	
+	    }
+	    else 
+	    {
+	    	ipU[3]=0;
+	    	if(ipU[2]!=(byte)255)
+	    	{
+	    		ipU[2]= (byte) (Utils.unsignedToBytes(ipU[2])+1);       		
+	    	}
+	    	else
+	    	{
+	    		ipU[2]=0;
+	    		if(ipU[1]!=(byte)255)
+	    		{
+	    			ipU[1]= (byte) (Utils.unsignedToBytes(ipU[1])+1);  
+	    		}
+	    		else
+	    		{
+	    			ipU[1]=0;
+	        		if(ipU[0]!=(byte)255)
+	        		{
+	        			ipU[0]= (byte) (Utils.unsignedToBytes(ipU[0])+1);  
+	        		}
+	        		else 
+	        		{
+	        			System.err.println("ERROR : FIN IPS");
+	        			return null;
+	        		}
+	    		}
+	    	}
+	    }       
+	    this.assignableIP.add(new IpAsign(temp));        
     	assign(assignableIP.get(assignableIP.size()-1), time,mac,false);
 		return temp;
  
@@ -241,8 +239,10 @@ public class Red {
      public IpAsign verificarip (byte[] ciAddr)
      {
 	    for (IpAsign ip : assignableIP) {
-			if(Utils.compareIp(ip.ip, ciAddr));
-			return ip;
+
+        	
+			if(Utils.compareIp(ip.ip, ciAddr))
+				return ip;
 		}
 	    return null;
      }

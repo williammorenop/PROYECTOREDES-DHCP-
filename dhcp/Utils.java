@@ -103,7 +103,15 @@ public class Utils {
         }
 
     static boolean compareIp(byte[] gateway, byte[] giAddr) {
-        return gateway[0] == giAddr[0] && gateway[1] == giAddr[1] && gateway[2] == giAddr[2] && gateway[3] == giAddr[3] ;
+        boolean res =
+        	Utils.unsignedToBytes(gateway[0])==Utils.unsignedToBytes(giAddr[0])   && 
+        		Utils.unsignedToBytes(gateway[1])==Utils.unsignedToBytes(giAddr[1]) &&
+        				Utils.unsignedToBytes(gateway[2])==Utils.unsignedToBytes(giAddr[2]) 
+        				&& 
+        				Utils.unsignedToBytes(gateway[3])==Utils.unsignedToBytes(giAddr[3])
+        			;
+        
+        return res;
     }
 
     static boolean isEquals(byte[] chAddr, byte[] mac) {
