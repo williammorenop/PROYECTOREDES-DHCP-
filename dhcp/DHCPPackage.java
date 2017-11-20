@@ -355,15 +355,15 @@ public class DHCPPackage
     }
     public String toStringLog()
     {
-    	String ret =  op +"\t"+ hType + "\t"+ hLenght +"\t"
+    	String ret =  op +"\t|\t"+ hType + "\t|\t"+ hLenght +"\t|\t"
         + hOps +"\t"+  toStringXId()  +
-        "\t"+  toStringSecs() +
-        "\t"+  toStringCiAddr()+
-        "\t"+  toStringYiAddr()+
-        "\t"+  toStringSiAddr()+
-        "\t"+  toStringGiAddr()+
-        "\t"+  toStringChAddr()+
-        "\t"+ getOptionTipe();
+        "\t|\t"+  toStringSecs() +
+        "\t|\t"+  toStringCiAddr()+
+        "\t|\t"+  toStringYiAddr()+
+        "\t|\t"+  toStringSiAddr()+
+        "\t|\t"+  toStringGiAddr()+
+        "\t|\t"+  toStringChAddr()+
+        "\t|\t"+ getOptionTipe();
     	
     	return ret;
     }

@@ -90,9 +90,9 @@ public class DHCPServer {
     public static void main(String[] args) {
         try {
         	fileLog = new PrintWriter("log.txt");
-        	fileLog.println("MessageType\tHardwareType\tHAddrLength\t"
-        			+"Hops\tTransId\tSelapse\tClientIp\tYoutIp\t"
-        			+"NServerIp\tRelaIp\tClientMAC\tHostname\tOptions");
+        	fileLog.println("MessageType\t|\tHardwareType\t|\tHAddrLength\t|\t"
+        			+"Hops\t|\tTransId\t|\tSelapse\t|\tClientIp\t|\tYoutIp\t|\t"
+        			+"NServerIp\t|\tRelaIp\t|\tClientMAC\t|\tHostname\t|\tOptions");
         	fileLog.close();
            Scanner s=new Scanner (System.in);
             System.out.println("INGRESE EL TIEMPO DE ALQUILER EN SEGUNDOS");
