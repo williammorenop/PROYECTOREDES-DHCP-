@@ -170,6 +170,7 @@ public class DHCPServer {
                     	{
                     		teme=InetAddress.getByName(BROADCAST);
                     		temp=pack.getIpOptions();
+                    		rPack.assign(rPack.agregarIp(temp), TIME, pack.chAddr,true);;
                     	}
                     	buffer = pack.newACK(temp , myIp , rPack, TIME);
                         //System.out.println("request");
@@ -196,7 +197,7 @@ public class DHCPServer {
                 for (Red red : redes) {
 					red.cambioEstado();
 				}
-           	 System.out.println("************************************************************************************************************************************************************************");
+           	 System.out.println("****************************************"+Utils.printTime()+"********************************************************************************************************************************");
 
                 for (Red red : redes) {
                 	red.toString();

@@ -5,6 +5,7 @@
  */
 package dhcp;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
@@ -40,11 +41,13 @@ public class Red {
         this.timeS = this.timeF = null;
       }
       public void toString2() {
-    	  System.out.println("|"+Utils.bytesToString(ip)+"\t|\t"+mactostring(mac)+"\t|\t"+used+"\t|\t"+timeS+"\t|\t"+timeF+"\t|\t");
+    	  System.out.println("|"+Utils.bytesToString(ip)+"\t|\t"+mactostring(mac)+"\t|\t"+used+"\t|\t"+Utils.printTime(timeS)+"\t|\t"+Utils.printTime(timeF)+"\t|\t");
       }
       public String mactostring(byte[] mac)
       {
         String s = "";
+        if( mac == null )
+        		return s;
         for( int i = 0 ;i  < 6; ++i )
         {
           if( i != 0 )
@@ -147,7 +150,7 @@ public class Red {
       System.out.println((ipF[0] & 0xFF )+"."+(ipF[1] & 0xFF)+"."+(ipF[2]& 0xFF)+"."+(ipF[3]& 0xFF));
       System.out.println();
     }
-    byte[] newIP(int time)
+    byte[] newIP(int time,byte[] mac)
     {
     	byte[] temp = new byte[4];
         for (int i = 0; i < 4; i++) {
@@ -188,7 +191,7 @@ public class Red {
         	}
         }
         this.assignableIP.add(new IpAsign(temp));        
-    	assign(assignableIP.get(assignableIP.size()-1), time);
+    	assign(assignableIP.get(assignableIP.size()-1), time,mac,false);
 		return temp;
  
     }
@@ -199,7 +202,7 @@ public class Red {
         	System.out.println("--------------------Entre1");
             if( Utils.isEquals(chAddr,ip.mac) )
             {
-                assign(ip,time);
+                assign(ip,time,chAddr,false);
                 return ip.ip;
             }
         }
@@ -208,15 +211,18 @@ public class Red {
         	System.out.println("********************Entre2");
             if( !ip.isUsed() )
             {
-                assign(ip,time);
+                assign(ip,time,chAddr,false);
                 return ip.ip;
             }
         }
         System.out.println("{{{{{{{{{{{{{{{{{{{{Entre3");
-        return newIP(time);
+        return newIP(time,chAddr);
     }
-    private void assign(IpAsign ip, int time) {
-        ip.used = true;
+    public void assign(IpAsign ip, int time,byte[] mac, boolean used) {
+        ip.used = used;
+        ip.mac = new byte[6];
+        for( int i = 0;  i < 6 ; ++i )
+        	ip.mac[ i ] = mac[ i ];
         ip.timeS = new GregorianCalendar();
         ip.timeF = new GregorianCalendar();
         ip.timeF.add(GregorianCalendar.SECOND, time);
@@ -247,16 +253,24 @@ public class Red {
 	    temp.timeF.add(GregorianCalendar.SECOND, time);
 	    return true;
      }
+     public void printLine()
+     {
+    	 System.out.println("------------------------------------------------------------------------------------------------------------------");
+     }
      
      public String toString() {
+    	//Utils.clearScreen();
     	 System.out.println(" Nombre: "+name+" IP Inicio: "+ Utils.bytesToString(ipS)+ " IP Fin: "+Utils.bytesToString(ipF)+" Mascara: "+Utils.bytesToString(mask)+" DNS: "+Utils.bytesToString(dns)+" GateWay "+Utils.bytesToString(gateway));
-    	 System.out.println("-----------------------------------------------------------------------------------------");
-    	 System.out.println("|IP\t|\tMAC\t|\tUso\t|\tTiempo Inicio\t|\tTiempo Fin\t|\t");    	 
-    	 System.out.println("-----------------------------------------------------------------------------------------");
+    	 printLine();
+    	 System.out.println("|\tIP\t|\t\tMAC\t\t|\tUso\t|\tTiempo Inicio\t|\tTiempo Fin\t|\t");    	 
+    	 printLine();
+    	 
     	 for (IpAsign ipAsign : assignableIP) {
-			ipAsign.toString2();
+    		if( ipAsign.used )
+    			ipAsign.toString2();
     	 }
-    	 System.out.println("-----------------------------------------------------------------------------------------");
+    	 printLine();
+    	 
     	 
 		return null;
      }
@@ -268,5 +282,14 @@ public class Red {
 				ipAsign.setUsed(false);
 			}
 		}		
+	}
+	public IpAsign agregarIp(byte[] ip) {
+		IpAsign temp = verificarip(ip);
+		if( temp == null )
+		{
+			this.assignableIP.add(new IpAsign(ip));
+			temp = this.assignableIP.get(this.assignableIP.size()-1);
+		}	
+		return temp;
 	}
 }

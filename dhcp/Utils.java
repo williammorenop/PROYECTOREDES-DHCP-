@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -129,5 +131,14 @@ public class Utils {
     {
         return b & 0xFF;
     }
-
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
+       }
+	public static String printTime(GregorianCalendar time) {
+		return new SimpleDateFormat("hh:mm:ss").format(time.getTime());
+	}
+	public static String printTime() {
+		return printTime(new GregorianCalendar());
+	} 
 }
