@@ -353,5 +353,28 @@ public class DHCPPackage
                 }
         }
     }
-
+    public String toStringLog()
+    {
+    	String ret =  op +"\t"+ hType + "\t"+ hLenght +"\t"
+        + hOps +"\t"+  toStringXId()  +
+        "\t"+  toStringSecs() +
+        "\t"+  toStringFlags()+
+        "\t"+  toStringCiAddr()+
+        "\t"+  toStringYiAddr()+
+        "\t"+  toStringSiAddr()+
+        "\t"+  toStringGiAddr()+
+        "\t"+  toStringChAddr()+
+        "\t"+  toStringSname()+"\t"+getOptionTipe();
+    	
+    	return ret;
+    }
+	private String getOptionTipe() {
+		if( this.isDiscover() )
+			return "Discover";
+		if( this.isRelease() )
+			return "Release";
+		if( this.isRequest() )
+			return "Request";
+		return "";
+	}
 }

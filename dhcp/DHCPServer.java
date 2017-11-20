@@ -6,6 +6,8 @@
 package dhcp;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import static java.lang.Thread.sleep;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -40,6 +42,7 @@ public class DHCPServer {
     static Queue<DHCPPackage> queue;
     static byte[] myIp;
 
+
     private static Red getRed(byte[] giAddr) {
         for (Red r : redes) {
             if( Utils.compareIp(r.gateway,giAddr) )
@@ -50,6 +53,7 @@ public class DHCPServer {
 
     DHCPServer()
     {
+    	PrintWriter fileLog;
         try {
             DatagramSocket socket = new DatagramSocket(PORT);
             System.out.println("Imprimo socket " + socket);
@@ -57,6 +61,7 @@ public class DHCPServer {
             boolean listen = true;
             byte[] buf = new byte[ MAX_LENGHT_BUFFER ];
             DatagramPacket packet = new DatagramPacket( buf , buf.length );
+            fileLog = new PrintWriter("log.txt", "UTF-8");
             while(listen) //
             {
               socket.receive(packet);
@@ -67,8 +72,10 @@ public class DHCPServer {
                 //System.out.println(dhcpPack);
             	
                 queue.add(dhcpPack);
+                fileLog.println(dhcpPack.toStringLog());
               }
             }
+            fileLog.close();
         } catch (SocketException ex) {
             Logger.getLogger(DHCPServer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
