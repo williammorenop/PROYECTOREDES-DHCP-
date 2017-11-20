@@ -118,14 +118,13 @@ public class Utils {
         if( chAddr == null || mac == null )
             return false;
        // System.out.println(Utils.macToString(chAddr)+" "+Utils.macToString(mac));
-        return Utils.macToString(chAddr).equals(Utils.macToString(mac));
-        /*if( chAddr.length != mac.length )
-                return false;
-        for( int i = 0 ; i < chAddr.length ; ++i )
+        //return Utils.macToString(chAddr).equals(Utils.macToString(mac));
+       
+        for( int i = 0 ; i < 6; ++i )
             if( chAddr[ i ] != mac[ i ])
                     return false;
-        System.out.println("jjajaj");
-        return true;*/
+       // System.out.println("jjajaj");
+        return true;
     }
 
     static String bytesToString(byte[] ip) {
