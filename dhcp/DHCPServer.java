@@ -197,6 +197,7 @@ public class DHCPServer {
                     		
                     		if( tt != null && tt.used == true && !Utils.isEquals(tt.mac, pack.chAddr) )
                     		{
+                    			
                     			nAck = true;
                     		
                     		}

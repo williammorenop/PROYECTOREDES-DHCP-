@@ -221,6 +221,7 @@ public class Red {
         ip.mac = new byte[6];
         for( int i = 0;  i < 6 ; ++i )
         	ip.mac[ i ] = mac[ i ];
+        System.out.println(Utils.macToString(ip.mac));
         ip.timeF = new GregorianCalendar();
         ip.timeS = new GregorianCalendar();
         if((ip.timeS.equals(ip.timeF)))

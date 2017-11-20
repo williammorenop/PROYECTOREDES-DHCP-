@@ -117,12 +117,15 @@ public class Utils {
     static boolean isEquals(byte[] chAddr, byte[] mac) {
         if( chAddr == null || mac == null )
             return false;
-        if( chAddr.length != mac.length )
+       // System.out.println(Utils.macToString(chAddr)+" "+Utils.macToString(mac));
+        return Utils.macToString(chAddr).equals(Utils.macToString(mac));
+        /*if( chAddr.length != mac.length )
                 return false;
         for( int i = 0 ; i < chAddr.length ; ++i )
             if( chAddr[ i ] != mac[ i ])
                     return false;
-        return true;
+        System.out.println("jjajaj");
+        return true;*/
     }
 
     static String bytesToString(byte[] ip) {
@@ -146,4 +149,36 @@ public class Utils {
 	public static String printTime() {
 		return printTime(new GregorianCalendar());
 	} 
+   	private static char hexUpperChar(byte b) {
+        b = (byte) ((b >> 4) & 0xf);
+        if (b == 0) return '0';
+        else if (b < 10) return (char) ('0' + b);
+        else return (char) ('a' + b - 10);
+
+
+    }
+
+    private static char hexLowerChar(byte b) {
+        b = (byte) (b & 0xf);
+
+        if (b == 0) return '0';
+
+        else if (b < 10) return (char) ('0' + b);
+
+        else return (char) ('a' + b - 10);
+    }
+  private static String harToString( byte n )
+  {
+    return String.valueOf(hexUpperChar(n))+String.valueOf(hexLowerChar(n));
+  }
+  public static String macToString( byte[] mac) 
+  {
+	  String s = "";
+	  for( int i = 0 ; i < 6 ; ++i )
+	  {  if( i != 0 )
+			  s+= ":";
+		  s += harToString(mac[i]);
+	  }
+	  return s;
+	 }
 }
