@@ -14,7 +14,7 @@ public class Utils {
 
 	public static void leerArchivo(String nombre,List<Red> Redes)
 	{
-		File archivo = new File ("./src/Log.txt");
+		File archivo = new File ("./src/init.txt");
 		FileReader fr = null;
 		try {
 			fr = new FileReader (archivo);
